@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Only For You, My Love</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffd1dc, #ffe6f0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 1s ease;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      width: 100%;
+    }
+
+    .message-top {
+      font-size: 2rem;
+      color: #d63384;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .heart-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: auto;
+    }
+
+    canvas {
+      cursor: pointer;
+    }
+
+    .hidden-img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .rose-message {
+      margin-top: 20px;
+      font-size: 1.8rem;
+      color: #e60073;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .love-button, .surprise-button, .yes-button, .no-button {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background-color: hotpink;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    .love-button { display: none; }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 1rem;
+      color: #a94c7c;
+    }
+
+    #page2, #page3, #page4 {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      padding: 30px 20px;
+      overflow-y: auto;
+    }
+
+    #yourLetter {
+      max-width: 700px;
+      font-size: 18px;
+      color: #d63384;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      text-align: center;
+    }
+
+    .ring {
+      width: 200px;
+      height: 200px;
+      animation: rotate 5s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .proposal {
+      font-size: 2rem;
+      color: crimson;
+      margin-top: 20px;
+    }
+
+    .yes-no-container {
+      margin-top: 20px;
+    }
+
+    .no-button {
+      position: relative;
+    }
+
+    #page4 img {
+      width: 300px;
+      animation: pop 1s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Page 1 -->
+  <div class="container" id="page1">
+    <div class="message-top" id="scratchMsg">Scratch me 💘</div>
+    <div class="heart-container">
+      <canvas id="scratchCanvas" width="400" height="400"></canvas>
+      <img src="vecteezy_a-beautiful-red-rose-bouquet-arranged-elegantly-on-a_65585012 (1).png" alt="Rose" class="hidden-img" id="roseImage" />
+    </div>
+    <div class="rose-message" id="loveMessage">Only for you, my love 💖</div>
+    <button class="love-button" id="loveButton" onclick="showPage(2)">Love Letter 💌</button>
+    <div class="footer">Made by Milanika</div>
+  </div>
+
+  <!-- Page 2 - Love Letter -->
+  <div class="container" id="page2">
+    <div id="yourLetter">
+      Dear My Love,<br><br>
+      In a world that often feels too fast, too confusing, and too loud, you have been my calm — my quiet place, my gentle understanding. You never fail to listen to me, even when I don’t say a word. Your love wraps around me like a blanket on the coldest nights, and your presence is my peace.<br><br>
+      Thank you for always understanding me, even when I struggle to understand myself. Thank you for your patience, your kindness, your support, and your little efforts that mean the world to me. I notice them all. I feel them all. And I’m always grateful.<br><br>
+      You are the cutest. You always respect me and care for me in ways that melt my heart. Your gentle love makes me feel safe, seen, and deeply cherished. ❤️<br><br>
+      You are my constant, my strength, and the one my heart chooses every single day.<br><br>
+      <b>నేను నిన్ను ప్రేమిస్తున్నాను 🤍</b><br>
+      (I love you)<br><br>
+      Forever yours,<br>
+      — Milanika
+    </div>
+    <button class="surprise-button" onclick="showPage(3)">Final Surprise 💝</button>
+  </div>
+
+  <!-- Page 3 – Proposal Page -->
+  <div class="container" id="page3">
+    <img src="GR14287557PNG_01.png" alt="Ring" class="ring" />
+    <div class="proposal">Will you marry me? 💍</div>
+    <div class="yes-no-container">
+      <button class="yes-button" onclick="showPage(4)">YES 💖</button>
+      <button class="no-button" id="noBtn" onclick="moveNo()">NO 😜</button>
+    </div>
+  </div>
+
+  <!-- Page 4 – Hurray -->
+  <div class="container" id="page4">
+    <img src="hooray.jpg" alt="Hurray" />
+    <h1 style="color: crimson; margin-top: 20px;">HURRAY!! 💖💍</h1>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("scratchCanvas");
+    const ctx = canvas.getContext("2d");
+    const roseImg = document.getElementById("roseImage");
+    const loveMsg = document.getElementById("loveMessage");
+    const loveBtn = document.getElementById("loveButton");
+    let isDrawing = false, scratched = 0;
+
+    function drawHeart() {
+      ctx.fillStyle = "#ff4d88";
+      ctx.beginPath();
+      const x = 200, y = 200, r = 100;
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x, y - r, x - r, y - r, x - r, y);
+      ctx.bezierCurveTo(x - r, y + r, x, y + r * 1.5, x, y + r * 2);
+      ctx.bezierCurveTo(x, y + r * 1.5, x + r, y + r, x + r, y);
+      ctx.bezierCurveTo(x + r, y - r, x, y - r, x, y);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function init() {
+      drawHeart();
+    }
+
+    canvas.addEventListener("mousedown", () => isDrawing = true);
+    canvas.addEventListener("mouseup", () => isDrawing = false);
+    canvas.addEventListener("mouseleave", () => isDrawing = false);
+    canvas.addEventListener("mousemove", (e) => {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(x, y, 25, 0, Math.PI * 2);
+      ctx.fill();
+      scratched += 1;
+      if (scratched > 150) revealRose();
+    });
+
+    function revealRose() {
+      canvas.style.display = "none";
+      roseImg.style.opacity = 1;
+      loveMsg.style.opacity = 1;
+      loveBtn.style.display = "inline-block";
+      document.getElementById("scratchMsg").style.display = "none";
+    }
+
+    function showPage(pageNum) {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById("page" + i).style.display = "none";
+      }
+      document.getElementById("page" + pageNum).style.display = "flex";
+    }
+
+    function moveNo() {
+      const btn = document.getElementById("noBtn");
+      const x = Math.floor(Math.random() * 200) - 100;
+      const y = Math.floor(Math.random() * 200) - 100;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    init();
+  </script>
+</body>
+</html>
